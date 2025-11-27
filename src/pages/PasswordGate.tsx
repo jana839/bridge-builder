@@ -12,7 +12,7 @@ const PasswordGate = () => {
     e.preventDefault();
     
     // Simple password check - in production, this would be more secure
-    if (password === "bridge123" || password.length > 0) {
+    if (password === "BranfordBridge06405") {
       sessionStorage.setItem("bridgeAccess", "granted");
       navigate("/finder");
     } else {
