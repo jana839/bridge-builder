@@ -137,11 +137,11 @@ const PartnerFinder = () => {
 
   const getLevelColor = (level: Player["level"]) => {
     const colors = {
-      Novice: "bg-badge-novice",
-      Beginner: "bg-badge-beginner",
-      Intermediate: "bg-badge-intermediate",
-      Advanced: "bg-badge-advanced",
-      Expert: "bg-badge-expert",
+      Novice: "bg-[#6B9F8E] text-white",
+      Beginner: "bg-[#6B9F8E] text-white",
+      Intermediate: "bg-[#C4914F] text-white",
+      Advanced: "bg-[#2D5F4D] text-white",
+      Expert: "bg-white text-[#C4914F] border-2 border-[#C4914F]",
     };
     return colors[level];
   };
@@ -180,52 +180,52 @@ const PartnerFinder = () => {
                 <p className="text-muted-foreground">No players currently seeking partners. Be the first to post!</p>
               </Card>
             ) : (
-              <div className="grid gap-4">
+              <div className="grid gap-6">
                 {players.map((player) => (
-                  <Card key={player.id} className="p-6 relative">
+                  <Card key={player.id} className="p-8 relative bg-white border border-gray-200 rounded-2xl shadow-sm">
                     {/* Level Badge - Top Right */}
-                    <div className={`absolute top-4 right-4 px-3 py-1 rounded-full text-white text-sm font-medium ${getLevelColor(player.level)}`}>
+                    <div className={`absolute top-6 right-6 px-4 py-1.5 rounded-full text-sm font-medium ${getLevelColor(player.level)}`}>
                       {player.level}
                     </div>
 
-                    <div className="space-y-3 pr-24">
+                    <div className="space-y-4 pr-32">
                       {/* Name */}
-                      <div className="flex items-center gap-2">
-                        <Users className="w-4 h-4 text-muted-foreground" />
-                        <h3 className="text-xl font-semibold">{player.name}</h3>
+                      <div className="flex items-center gap-3">
+                        <Users className="w-5 h-5 text-gray-400" />
+                        <h3 className="text-3xl font-playfair font-bold text-gray-900">{player.name}</h3>
                       </div>
 
-                      {/* Date & Time */}
-                      <div className="flex flex-wrap gap-4 text-sm">
-                        <div className="flex items-center gap-2">
-                          <Calendar className="w-4 h-4 text-muted-foreground" />
-                          <span>{new Date(player.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Clock className="w-4 h-4 text-muted-foreground" />
-                          <span>{player.time}</span>
-                        </div>
+                      {/* Date */}
+                      <div className="flex items-center gap-3">
+                        <Calendar className="w-5 h-5 text-gray-400" />
+                        <span className="text-lg text-gray-600">{new Date(player.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
+                      </div>
+
+                      {/* Time */}
+                      <div className="flex items-center gap-3">
+                        <Clock className="w-5 h-5 text-gray-400" />
+                        <span className="text-lg text-gray-600">{player.time}</span>
                       </div>
 
                       {/* Location */}
-                      <div className="flex items-center gap-2 text-sm">
-                        <MapPin className="w-4 h-4 text-muted-foreground" />
-                        <span>{player.location}</span>
+                      <div className="flex items-center gap-3">
+                        <MapPin className="w-5 h-5 text-gray-400" />
+                        <span className="text-lg text-gray-600">{player.location}</span>
                       </div>
 
                       {/* Email */}
-                      <div className="flex items-center gap-2 text-sm">
-                        <Mail className="w-4 h-4 text-muted-foreground" />
-                        <a href={`mailto:${player.email}`} className="text-accent hover:underline font-medium">
+                      <div className="flex items-center gap-3">
+                        <Mail className="w-5 h-5 text-gray-400" />
+                        <a href={`mailto:${player.email}`} className="text-lg text-[#C4914F] hover:underline">
                           {player.email}
                         </a>
                       </div>
 
                       {/* Notes */}
                       {player.notes && (
-                        <div className="flex items-start gap-2 text-sm">
-                          <MessageSquare className="w-4 h-4 text-muted-foreground mt-0.5" />
-                          <span className="text-muted-foreground italic">{player.notes}</span>
+                        <div className="flex items-start gap-3">
+                          <MessageSquare className="w-5 h-5 text-gray-400 mt-0.5" />
+                          <span className="text-lg text-gray-500 italic">{player.notes}</span>
                         </div>
                       )}
 
@@ -244,15 +244,13 @@ const PartnerFinder = () => {
                       )}
 
                       {/* Remove Button */}
-                      <Button
-                        variant="outline"
-                        size="sm"
+                      <button
                         onClick={() => handleRemove(player)}
-                        className="flex items-center gap-2 text-muted-foreground hover:text-destructive"
+                        className="flex items-center gap-2 text-gray-500 hover:text-gray-700 mt-6 pt-4 border-t border-gray-200"
                       >
-                        <UserMinus className="w-4 h-4" />
-                        Partner no longer needed
-                      </Button>
+                        <UserMinus className="w-5 h-5" />
+                        <span className="text-base">Partner no longer needed</span>
+                      </button>
                     </div>
                   </Card>
                 ))}
