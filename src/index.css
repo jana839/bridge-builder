@@ -38,6 +38,13 @@ All colors MUST be HSL.
 
     --radius: 0.75rem;
 
+    /* Skill level badge colors */
+    --badge-novice: 158 50% 75%;
+    --badge-beginner: 158 64% 45%;
+    --badge-intermediate: 33 70% 55%;
+    --badge-advanced: 220 70% 55%;
+    --badge-expert: 270 60% 55%;
+
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
