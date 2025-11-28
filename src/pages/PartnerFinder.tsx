@@ -89,35 +89,28 @@ const PartnerFinder = () => {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="bg-card border-b border-border">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="flex gap-1">
-                <span className="text-2xl text-primary">♠</span>
-                <span className="text-2xl text-destructive">♥</span>
-                <span className="text-2xl text-accent">♦</span>
-                <span className="text-2xl text-primary">♣</span>
-              </div>
-              <h1 className="text-2xl font-bold text-foreground" style={{ fontFamily: "'Playfair Display', serif" }}>
-                Bridge Partner Finder
-              </h1>
-            </div>
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center gap-2">
+            <span className="text-xl text-muted-foreground">♠</span>
+            <h1 className="text-xl font-semibold text-foreground">
+              Bridge Partner Finder
+            </h1>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-6">
         {/* Search and Filters */}
-        <div className="mb-8 space-y-4">
+        <div className="mb-6 space-y-3">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-5 h-5" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
             <Input
               type="text"
               placeholder="Search by name or location..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 h-12"
+              className="pl-10 h-10"
             />
           </div>
 
@@ -143,39 +136,39 @@ const PartnerFinder = () => {
         </div>
 
         {/* Partner Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredPartners.map(partner => (
-            <Card key={partner.id} className="p-6 hover:shadow-lg transition-shadow">
-              <div className="space-y-4">
+            <Card key={partner.id} className="p-5">
+              <div className="space-y-3">
                 <div className="flex items-start justify-between">
                   <div>
-                    <h3 className="text-xl font-semibold text-foreground mb-1">
+                    <h3 className="text-lg font-semibold text-foreground mb-1">
                       {partner.name}
                     </h3>
-                    <div className="flex items-center gap-1 text-accent">
-                      <Star className="w-4 h-4 fill-current" />
-                      <span className="text-sm font-medium">{partner.rating}</span>
+                    <div className="flex items-center gap-1 text-muted-foreground">
+                      <Star className="w-3.5 h-3.5 fill-current" />
+                      <span className="text-sm">{partner.rating}</span>
                     </div>
                   </div>
-                  <Badge variant="secondary">{partner.skill}</Badge>
+                  <Badge variant="secondary" className="text-xs">{partner.skill}</Badge>
                 </div>
 
                 <p className="text-sm text-muted-foreground">
                   {partner.bio}
                 </p>
 
-                <div className="space-y-2 text-sm">
+                <div className="space-y-1.5 text-sm">
                   <div className="flex items-center gap-2 text-muted-foreground">
-                    <MapPin className="w-4 h-4" />
+                    <MapPin className="w-3.5 h-3.5" />
                     <span>{partner.location}</span>
                   </div>
                   <div className="flex items-center gap-2 text-muted-foreground">
-                    <Clock className="w-4 h-4" />
+                    <Clock className="w-3.5 h-3.5" />
                     <span>{partner.availability}</span>
                   </div>
                 </div>
 
-                <Button className="w-full">
+                <Button className="w-full" size="sm">
                   Connect
                 </Button>
               </div>
@@ -185,7 +178,7 @@ const PartnerFinder = () => {
 
         {filteredPartners.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-muted-foreground text-lg">
+            <p className="text-muted-foreground">
               No partners found matching your criteria.
             </p>
           </div>
