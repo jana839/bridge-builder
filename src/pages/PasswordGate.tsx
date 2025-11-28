@@ -23,15 +23,15 @@ const PasswordGate = () => {
   return (
     <main className="min-h-screen flex items-center justify-center bg-background p-4">
       <div className="w-full max-w-md">
-        <div className="bg-card rounded-2xl shadow-2xl p-8 border border-border">
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
-              <span className="text-4xl text-primary">♠</span>
+        <div className="bg-card rounded-lg p-8 border border-border">
+          <div className="text-center mb-6">
+            <div className="inline-flex items-center justify-center mb-4">
+              <span className="text-4xl text-muted-foreground">♠</span>
             </div>
-            <h1 className="text-3xl font-bold text-foreground mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>
+            <h1 className="text-2xl font-semibold text-foreground mb-2">
               Bridge Partner Finder
             </h1>
-            <p className="text-muted-foreground">
+            <p className="text-sm text-muted-foreground">
               Enter the password to access the site
             </p>
           </div>
@@ -43,12 +43,12 @@ const PasswordGate = () => {
                 placeholder="Enter password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="h-12"
+                className="h-11"
               />
             </div>
             <Button 
               type="submit" 
-              className="w-full h-12 text-base font-medium"
+              className="w-full h-11"
             >
               Enter
             </Button>
