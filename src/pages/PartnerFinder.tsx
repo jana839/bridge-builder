@@ -22,7 +22,8 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Calendar, Clock, MapPin, Mail, MessageSquare, UserMinus, Users } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Player {
   id: string;
@@ -33,10 +34,12 @@ interface Player {
   time: string;
   level: "Novice" | "Beginner" | "Intermediate" | "Advanced" | "Expert";
   notes?: string;
+  created_at?: string;
 }
 
 const PartnerFinder = () => {
   const [players, setPlayers] = useState<Player[]>([]);
+  const [loading, setLoading] = useState(true);
   const [removeDialog, setRemoveDialog] = useState<{ open: boolean; player: Player | null }>({
     open: false,
     player: null,
@@ -53,81 +56,101 @@ const PartnerFinder = () => {
     notes: "",
   });
 
-  // Load players from localStorage on mount
+  // Load players from database and set up realtime subscription
   useEffect(() => {
-    const stored = localStorage.getItem("bridgePlayers");
-    if (stored) {
-      setPlayers(JSON.parse(stored));
+    loadPlayers();
+
+    // Subscribe to realtime updates
+    const channel = supabase
+      .channel('partner_listings_changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'partner_listings'
+        },
+        () => {
+          loadPlayers();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  const loadPlayers = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('partner_listings')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      setPlayers((data || []) as Player[]);
+    } catch (error) {
+      console.error('Error loading players:', error);
+      toast.error('Failed to load listings');
+    } finally {
+      setLoading(false);
     }
-  }, []);
+  };
 
-  // Save players to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem("bridgePlayers", JSON.stringify(players));
-  }, [players]);
-
-  // Remove expired players
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const now = new Date();
-      setPlayers((prev) =>
-        prev.filter((player) => {
-          const playerDateTime = new Date(`${player.date}T${player.time}`);
-          return playerDateTime > now;
-        })
-      );
-    }, 60000); // Check every minute
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!formData.name || !formData.email || !formData.location || !formData.date || !formData.time) {
-      toast({
-        title: "Missing Information",
-        description: "Please fill in all required fields.",
-        variant: "destructive",
-      });
+      toast.error("Please fill in all required fields");
       return;
     }
 
-    const newPlayer: Player = {
-      id: Date.now().toString(),
-      ...formData,
-    };
+    try {
+      const { error } = await supabase
+        .from('partner_listings')
+        .insert([formData]);
 
-    setPlayers([newPlayer, ...players]);
-    
-    // Reset form
-    setFormData({
-      name: "",
-      email: "",
-      location: "",
-      date: "",
-      time: "",
-      level: "Beginner",
-      notes: "",
-    });
+      if (error) throw error;
 
-    toast({
-      title: "Posted Successfully!",
-      description: "Your availability has been added to the list.",
-    });
+      // Reset form
+      setFormData({
+        name: "",
+        email: "",
+        location: "",
+        date: "",
+        time: "",
+        level: "Beginner",
+        notes: "",
+      });
+
+      toast.success("Your availability has been posted!");
+    } catch (error) {
+      console.error('Error posting listing:', error);
+      toast.error('Failed to post listing');
+    }
   };
 
   const handleRemove = (player: Player) => {
     setRemoveDialog({ open: true, player });
   };
 
-  const confirmRemove = () => {
+  const confirmRemove = async () => {
     if (removeDialog.player) {
-      setPlayers(players.filter((p) => p.id !== removeDialog.player!.id));
-      toast({
-        title: "Listing Removed",
-        description: "The player listing has been removed.",
-      });
+      try {
+        const { error } = await supabase
+          .from('partner_listings')
+          .delete()
+          .eq('id', removeDialog.player.id);
+
+        if (error) throw error;
+
+        toast.success("Listing removed");
+      } catch (error) {
+        console.error('Error removing listing:', error);
+        toast.error('Failed to remove listing');
+      }
     }
     setRemoveDialog({ open: false, player: null });
   };
@@ -180,7 +203,11 @@ const PartnerFinder = () => {
               <span className="text-gray-500 text-sm">({players.length} {players.length === 1 ? 'player' : 'players'})</span>
             </div>
 
-            {players.length === 0 ? (
+            {loading ? (
+              <Card className="p-12 text-center">
+                <p className="text-muted-foreground">Loading listings...</p>
+              </Card>
+            ) : players.length === 0 ? (
               <Card className="p-12 text-center">
                 <p className="text-muted-foreground">No players currently seeking partners. Be the first to post!</p>
               </Card>
