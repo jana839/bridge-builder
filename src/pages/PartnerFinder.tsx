@@ -68,6 +68,16 @@ const PartnerFinder = () => {
   const [selectedDate, setSelectedDate] = useState<Date>();
   const [datePickerOpen, setDatePickerOpen] = useState(false);
 
+  // Filter state
+  const [filters, setFilters] = useState({
+    location: "all",
+    level: "all",
+    startDate: null as Date | null,
+    endDate: null as Date | null,
+  });
+  const [startDatePickerOpen, setStartDatePickerOpen] = useState(false);
+  const [endDatePickerOpen, setEndDatePickerOpen] = useState(false);
+
   // Load players from database and set up realtime subscription
   useEffect(() => {
     loadPlayers();
@@ -213,6 +223,56 @@ const PartnerFinder = () => {
     return colors[level];
   };
 
+  // Filter players based on selected filters
+  const filteredPlayers = players.filter((player) => {
+    // Location filter
+    if (filters.location !== "all" && player.location !== filters.location) {
+      return false;
+    }
+
+    // Level filter
+    if (filters.level !== "all" && player.level !== filters.level) {
+      return false;
+    }
+
+    // Date range filter
+    if (filters.startDate || filters.endDate) {
+      const playerDate = new Date(player.date + 'T00:00:00');
+      
+      if (filters.startDate) {
+        const startDate = new Date(filters.startDate);
+        startDate.setHours(0, 0, 0, 0);
+        if (playerDate < startDate) {
+          return false;
+        }
+      }
+
+      if (filters.endDate) {
+        const endDate = new Date(filters.endDate);
+        endDate.setHours(23, 59, 59, 999);
+        if (playerDate > endDate) {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  });
+
+  // Get unique locations from players
+  const uniqueLocations = Array.from(new Set(players.map(p => p.location))).sort();
+
+  const clearFilters = () => {
+    setFilters({
+      location: "all",
+      level: "all",
+      startDate: null,
+      endDate: null,
+    });
+  };
+
+  const hasActiveFilters = filters.location !== "all" || filters.level !== "all" || filters.startDate !== null || filters.endDate !== null;
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Hero Section */}
@@ -247,8 +307,128 @@ const PartnerFinder = () => {
             <div className="flex items-center gap-2 mb-6">
               <Users className="w-5 h-5 text-[#C4914F]" />
               <h2 className="text-2xl font-serif font-bold">Available Players</h2>
-              <span className="text-gray-500 text-sm">({players.length} {players.length === 1 ? 'player' : 'players'})</span>
+              <span className="text-gray-500 text-sm">({filteredPlayers.length} {filteredPlayers.length === 1 ? 'player' : 'players'})</span>
             </div>
+
+            {/* Filters */}
+            <Card className="p-4 mb-6 bg-gradient-card">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-semibold text-sm">Filter Players</h3>
+                {hasActiveFilters && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={clearFilters}
+                    className="h-8 text-xs"
+                  >
+                    Clear Filters
+                  </Button>
+                )}
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+                {/* Location Filter */}
+                <div>
+                  <Label htmlFor="filter-location" className="text-xs mb-1">Location</Label>
+                  <Select
+                    value={filters.location}
+                    onValueChange={(value) => setFilters({ ...filters, location: value })}
+                  >
+                    <SelectTrigger id="filter-location" className="h-9">
+                      <SelectValue placeholder="All locations" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All locations</SelectItem>
+                      {uniqueLocations.map((loc) => (
+                        <SelectItem key={loc} value={loc}>{loc}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Level Filter */}
+                <div>
+                  <Label htmlFor="filter-level" className="text-xs mb-1">Skill Level</Label>
+                  <Select
+                    value={filters.level}
+                    onValueChange={(value) => setFilters({ ...filters, level: value })}
+                  >
+                    <SelectTrigger id="filter-level" className="h-9">
+                      <SelectValue placeholder="All levels" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All levels</SelectItem>
+                      <SelectItem value="Novice">Novice</SelectItem>
+                      <SelectItem value="Beginner">Beginner</SelectItem>
+                      <SelectItem value="Intermediate">Intermediate</SelectItem>
+                      <SelectItem value="Advanced">Advanced</SelectItem>
+                      <SelectItem value="Expert">Expert</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Start Date Filter */}
+                <div>
+                  <Label htmlFor="filter-start-date" className="text-xs mb-1">From Date</Label>
+                  <Popover open={startDatePickerOpen} onOpenChange={setStartDatePickerOpen}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          "w-full h-9 justify-start text-left font-normal text-xs",
+                          !filters.startDate && "text-muted-foreground"
+                        )}
+                      >
+                        <Calendar className="mr-2 h-3 w-3 flex-shrink-0" />
+                        {filters.startDate ? format(filters.startDate, "MM/dd/yy") : "Start date"}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start" sideOffset={4}>
+                      <CalendarComponent
+                        mode="single"
+                        selected={filters.startDate || undefined}
+                        onSelect={(date) => {
+                          setFilters({ ...filters, startDate: date || null });
+                          setStartDatePickerOpen(false);
+                        }}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+
+                {/* End Date Filter */}
+                <div>
+                  <Label htmlFor="filter-end-date" className="text-xs mb-1">To Date</Label>
+                  <Popover open={endDatePickerOpen} onOpenChange={setEndDatePickerOpen}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          "w-full h-9 justify-start text-left font-normal text-xs",
+                          !filters.endDate && "text-muted-foreground"
+                        )}
+                      >
+                        <Calendar className="mr-2 h-3 w-3 flex-shrink-0" />
+                        {filters.endDate ? format(filters.endDate, "MM/dd/yy") : "End date"}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start" sideOffset={4}>
+                      <CalendarComponent
+                        mode="single"
+                        selected={filters.endDate || undefined}
+                        onSelect={(date) => {
+                          setFilters({ ...filters, endDate: date || null });
+                          setEndDatePickerOpen(false);
+                        }}
+                        disabled={(date) => filters.startDate ? date < filters.startDate : false}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+              </div>
+            </Card>
 
             {loading ? (
               <Card className="p-12 text-center">
@@ -258,9 +438,13 @@ const PartnerFinder = () => {
               <Card className="p-12 text-center">
                 <p className="text-muted-foreground">No players currently seeking partners. Be the first to post!</p>
               </Card>
+            ) : filteredPlayers.length === 0 ? (
+              <Card className="p-12 text-center">
+                <p className="text-muted-foreground">No players match your filters. Try adjusting your search criteria.</p>
+              </Card>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {players.map((player, index) => (
+                {filteredPlayers.map((player, index) => (
                   <Card key={player.id} className="bg-gradient-card border-border/50 shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1 overflow-hidden">
                     <div className="p-5 relative">
                       {/* Level Badge - Top Right Corner */}
