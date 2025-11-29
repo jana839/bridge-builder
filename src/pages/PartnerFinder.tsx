@@ -1,9 +1,16 @@
 import { useState, useEffect } from "react";
+import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Calendar as CalendarComponent } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -24,6 +31,7 @@ import {
 import { Calendar, Clock, MapPin, Mail, MessageSquare, UserMinus, Users } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { cn } from "@/lib/utils";
 
 interface Player {
   id: string;
@@ -55,7 +63,9 @@ const PartnerFinder = () => {
     time: "12:30",
     level: "Beginner" as Player["level"],
     notes: "",
+    event_link: "",
   });
+  const [selectedDate, setSelectedDate] = useState<Date>();
 
   // Load players from database and set up realtime subscription
   useEffect(() => {
@@ -141,6 +151,7 @@ const PartnerFinder = () => {
           time: formData.time,
           level: formData.level,
           notes: formData.notes,
+          event_link: formData.event_link || null,
         }]);
 
       if (error) throw error;
@@ -155,7 +166,9 @@ const PartnerFinder = () => {
         time: "12:30",
         level: "Beginner",
         notes: "",
+        event_link: "",
       });
+      setSelectedDate(undefined);
 
       toast.success("Your availability has been posted!");
     } catch (error) {
@@ -384,13 +397,36 @@ const PartnerFinder = () => {
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <Label htmlFor="date">Date *</Label>
-                    <Input
-                      id="date"
-                      type="date"
-                      value={formData.date}
-                      onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                      required
-                    />
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className={cn(
+                            "w-full justify-start text-left font-normal h-10",
+                            !selectedDate && "text-muted-foreground"
+                          )}
+                        >
+                          <Calendar className="mr-2 h-4 w-4" />
+                          {selectedDate ? format(selectedDate, "PPP") : <span>Pick a date</span>}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0 bg-popover z-50" align="start">
+                        <CalendarComponent
+                          mode="single"
+                          selected={selectedDate}
+                          onSelect={(date) => {
+                            setSelectedDate(date);
+                            setFormData({ 
+                              ...formData, 
+                              date: date ? format(date, "yyyy-MM-dd") : "" 
+                            });
+                          }}
+                          disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
+                          initialFocus
+                          className="pointer-events-auto"
+                        />
+                      </PopoverContent>
+                    </Popover>
                   </div>
                   <div>
                     <Label htmlFor="time">Time *</Label>
