@@ -518,6 +518,17 @@ const PartnerFinder = () => {
                   />
                 </div>
 
+                <div>
+                  <Label htmlFor="event_link">Event Link (optional)</Label>
+                  <Input
+                    id="event_link"
+                    type="url"
+                    placeholder="https://bridgewebs.com/event/..."
+                    value={formData.event_link}
+                    onChange={(e) => setFormData({ ...formData, event_link: e.target.value })}
+                  />
+                </div>
+
                 <Button type="submit" className="w-full">
                   Post Availability
                 </Button>
@@ -530,12 +541,17 @@ const PartnerFinder = () => {
       {/* Remove Confirmation Dialog */}
       <AlertDialog open={removeDialog.open} onOpenChange={(open) => setRemoveDialog({ open, player: null })}>
         <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Confirm Removal</AlertDialogTitle>
-            <AlertDialogDescription>
-              Are you sure you want to remove this listing? This action cannot be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Confirm Removal</AlertDialogTitle>
+          <AlertDialogDescription>
+            {removeDialog.player && (
+              <>
+                Please confirm that {removeDialog.player.email} no longer needs a partner for their bridge game on{' '}
+                {format(new Date(removeDialog.player.date), 'EEE, MMM d')} at {formatTime(removeDialog.player.time)}.
+              </>
+            )}
+          </AlertDialogDescription>
+        </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction onClick={confirmRemove} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
