@@ -308,17 +308,19 @@ const PartnerFinder = () => {
                             </a>
                           </div>
 
-                          {/* Notes */}
-                          {player.notes && (
-                            <div className="flex items-start gap-2 text-muted-foreground pt-1">
-                              <MessageSquare className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                              <span className="text-xs italic line-clamp-2">{player.notes}</span>
-                            </div>
-                          )}
+                          {/* Notes - Always rendered with min-height for consistent spacing */}
+                          <div className="flex items-start gap-2 text-muted-foreground pt-1 min-h-[40px]">
+                            {player.notes && (
+                              <>
+                                <MessageSquare className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                                <span className="text-xs italic line-clamp-2">{player.notes}</span>
+                              </>
+                            )}
+                          </div>
                         </div>
 
                         {/* Remove Button */}
-                        <div className="mt-4 pt-3 border-t border-border/50">
+                        <div className="pt-3 border-t border-border/50">
                           <button
                             onClick={() => handleRemove(player)}
                             className="w-full text-sm text-muted-foreground hover:text-destructive hover:bg-destructive/10 py-2 px-3 rounded-md transition-colors flex items-center justify-center gap-2"
