@@ -185,7 +185,7 @@ const PartnerFinder = () => {
                 <p className="text-muted-foreground">No players currently seeking partners. Be the first to post!</p>
               </Card>
             ) : (
-              <div className="grid gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {players.map((player) => (
                   <Card key={player.id} className="p-5 relative bg-white border border-gray-200 rounded-xl shadow-sm">
                     {/* Level Badge - Top Right */}
@@ -237,7 +237,7 @@ const PartnerFinder = () => {
                       {/* Remove Button */}
                       <button
                         onClick={() => handleRemove(player)}
-                        className="flex items-center gap-2 text-gray-400 hover:text-gray-600 mt-3 pt-2.5 border-t border-gray-100 w-full transition-colors"
+                        className="flex items-center justify-center gap-2 text-gray-400 hover:text-red-500 hover:bg-red-50 mt-3 pt-2.5 pb-2.5 border-t border-gray-100 w-full transition-colors rounded-b-lg"
                       >
                         <UserMinus className="w-[18px] h-[18px]" />
                         <span className="text-sm">Partner no longer needed</span>
