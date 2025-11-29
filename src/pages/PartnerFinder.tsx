@@ -66,6 +66,7 @@ const PartnerFinder = () => {
     event_link: "",
   });
   const [selectedDate, setSelectedDate] = useState<Date>();
+  const [datePickerOpen, setDatePickerOpen] = useState(false);
 
   // Load players from database and set up realtime subscription
   useEffect(() => {
@@ -400,7 +401,7 @@ const PartnerFinder = () => {
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <Label htmlFor="date">Date *</Label>
-                    <Popover>
+                    <Popover open={datePickerOpen} onOpenChange={setDatePickerOpen}>
                       <PopoverTrigger asChild>
                         <Button
                           variant="outline"
@@ -413,7 +414,7 @@ const PartnerFinder = () => {
                           {selectedDate ? format(selectedDate, "MM/dd/yyyy") : <span>Pick a date</span>}
                         </Button>
                       </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0 bg-popover z-50" align="start">
+                      <PopoverContent className="w-auto p-0" align="start" sideOffset={4}>
                         <CalendarComponent
                           mode="single"
                           selected={selectedDate}
@@ -423,10 +424,10 @@ const PartnerFinder = () => {
                               ...formData, 
                               date: date ? format(date, "yyyy-MM-dd") : "" 
                             });
+                            setDatePickerOpen(false);
                           }}
                           disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
                           initialFocus
-                          className="pointer-events-auto"
                         />
                       </PopoverContent>
                     </Popover>
