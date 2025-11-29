@@ -216,7 +216,7 @@ const PartnerFinder = () => {
                 {players.map((player) => (
                   <Card key={player.id} className="p-6 relative bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
                     {/* Level Badge - Top Right */}
-                    <div className={`absolute top-4 right-4 px-4 py-1.5 rounded-lg text-xs font-semibold ${getLevelColor(player.level)}`}>
+                    <div className={`absolute top-3 right-3 px-4 py-1.5 rounded-lg text-xs font-semibold ${getLevelColor(player.level)}`}>
                       {player.level}
                     </div>
 
