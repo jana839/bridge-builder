@@ -214,22 +214,22 @@ const PartnerFinder = () => {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {players.map((player) => (
-                  <Card key={player.id} className="p-6 relative bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+                  <Card key={player.id} className="p-6 relative bg-[#FAFAF8] border border-gray-200 rounded-3xl shadow-sm overflow-hidden">
                     {/* Level Badge - Top Right */}
-                    <div className={`absolute top-3 right-3 px-4 py-1.5 rounded-lg text-xs font-semibold ${getLevelColor(player.level)}`}>
+                    <div className={`absolute top-4 right-4 px-4 py-1.5 rounded-xl text-sm font-semibold ${getLevelColor(player.level)}`}>
                       {player.level}
                     </div>
 
-                    <div className="space-y-3 pr-32">
+                    <div className="space-y-4 pr-32">
                       {/* Name */}
                       <div className="flex items-center gap-3">
-                        <Users className="w-5 h-5 text-gray-400 flex-shrink-0" />
-                        <h3 className="text-xl font-serif font-bold text-gray-900">{player.name}</h3>
+                        <Users className="w-6 h-6 text-gray-400 flex-shrink-0" />
+                        <h3 className="text-2xl font-serif font-bold text-gray-900">{player.name}</h3>
                       </div>
 
                       {/* Date */}
                       <div className="flex items-center gap-3">
-                        <Calendar className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                        <Calendar className="w-5 h-5 text-gray-500 flex-shrink-0" />
                         <span className="text-base text-gray-600">
                           {new Date(player.date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
                         </span>
@@ -237,28 +237,28 @@ const PartnerFinder = () => {
 
                       {/* Time */}
                       <div className="flex items-center gap-3">
-                        <Clock className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                        <Clock className="w-5 h-5 text-gray-500 flex-shrink-0" />
                         <span className="text-base text-gray-600">{player.time}</span>
                       </div>
 
                       {/* Location */}
                       <div className="flex items-center gap-3">
-                        <MapPin className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                        <MapPin className="w-5 h-5 text-gray-500 flex-shrink-0" />
                         <span className="text-base text-gray-600">{player.location}</span>
                       </div>
 
                       {/* Email */}
                       <div className="flex items-center gap-3">
-                        <Mail className="w-5 h-5 text-gray-400 flex-shrink-0" />
-                        <a href={`mailto:${player.email}`} className="text-base text-[#C4914F] hover:underline break-all">
+                        <Mail className="w-5 h-5 text-gray-500 flex-shrink-0" />
+                        <a href={`mailto:${player.email}`} className="text-base text-[#D4934F] hover:underline break-all">
                           {player.email}
                         </a>
                       </div>
 
                       {/* Notes */}
                       {player.notes && (
-                        <div className="flex items-start gap-3">
-                          <MessageSquare className="w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5" />
+                        <div className="flex items-start gap-3 pt-2">
+                          <MessageSquare className="w-5 h-5 text-gray-500 flex-shrink-0 mt-0.5" />
                           <span className="text-base text-gray-500 italic">{player.notes}</span>
                         </div>
                       )}
@@ -267,7 +267,7 @@ const PartnerFinder = () => {
                     {/* Remove Button */}
                     <button
                       onClick={() => handleRemove(player)}
-                      className="flex items-center justify-center gap-2 text-gray-400 hover:text-red-500 hover:bg-red-50 mt-6 pt-4 pb-4 border-t border-gray-200 w-full transition-colors -mx-6 px-6"
+                      className="flex items-center justify-center gap-2 text-gray-500 hover:text-red-500 hover:bg-red-50 mt-8 pt-5 pb-5 border-t border-gray-200 w-full transition-colors -mx-6 px-6"
                     >
                       <UserMinus className="w-5 h-5" />
                       <span className="text-base">Partner no longer needed</span>
