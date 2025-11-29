@@ -91,7 +91,14 @@ const PartnerFinder = () => {
 
       if (error) throw error;
 
-      setPlayers((data || []) as Player[]);
+      // Filter out expired listings (date/time has passed)
+      const now = new Date();
+      const activePlayers = (data || []).filter((player) => {
+        const listingDateTime = new Date(`${player.date}T${player.time}:00`);
+        return listingDateTime > now;
+      });
+
+      setPlayers(activePlayers as Player[]);
     } catch (error) {
       console.error('Error loading players:', error);
       toast.error('Failed to load listings');

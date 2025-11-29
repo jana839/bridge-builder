@@ -1,1 +1,4 @@
 project_id = "qynolohcezdxzobvecyg"
+
+[functions.cleanup-expired-listings]
+verify_jwt = false
