@@ -230,7 +230,9 @@ const PartnerFinder = () => {
                       {/* Date */}
                       <div className="flex items-center gap-2">
                         <Calendar className="w-[18px] h-[18px] text-gray-400" />
-                        <span className="text-sm text-gray-600">{new Date(player.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
+                        <span className="text-sm text-gray-600">
+                          {new Date(player.date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+                        </span>
                       </div>
 
                       {/* Time */}
