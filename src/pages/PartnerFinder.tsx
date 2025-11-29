@@ -144,25 +144,25 @@ const PartnerFinder = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       {/* Hero Section */}
-      <div className="bg-[#2D5F4D] text-white py-20 px-4 relative overflow-hidden">
+      <div className="bg-[#3D6B5C] text-white py-20 px-4 relative overflow-hidden">
         {/* Large decorative card symbols in background */}
-        <div className="absolute inset-0 pointer-events-none opacity-10">
-          <span className="absolute text-[200px] top-0 left-10">♠</span>
-          <span className="absolute text-[180px] top-20 left-[30%]">♥</span>
-          <span className="absolute text-[200px] bottom-10 right-10">♦</span>
-          <span className="absolute text-[180px] top-10 right-[25%]">♣</span>
+        <div className="absolute inset-0 pointer-events-none opacity-[0.08]">
+          <span className="absolute text-[280px] top-[-40px] left-[5%]">♠</span>
+          <span className="absolute text-[220px] top-[20px] left-[35%]">♥</span>
+          <span className="absolute text-[260px] top-[-30px] right-[8%]">♦</span>
+          <span className="absolute text-[240px] bottom-[-60px] right-[30%]">♣</span>
         </div>
         
         <div className="container mx-auto text-center relative z-10">
           <div className="flex justify-center gap-4 mb-6">
-            <span className="text-3xl">♠</span>
-            <span className="text-3xl">♥</span>
-            <span className="text-3xl">♦</span>
-            <span className="text-3xl">♣</span>
+            <span className="text-4xl text-[#C4914F]" style={{ WebkitTextStroke: '1.5px #C4914F', WebkitTextFillColor: 'transparent', fontWeight: 400 }}>♠</span>
+            <span className="text-4xl text-[#C4914F]" style={{ WebkitTextStroke: '1.5px #C4914F', WebkitTextFillColor: 'transparent', fontWeight: 400 }}>♥</span>
+            <span className="text-4xl text-[#C4914F]" style={{ WebkitTextStroke: '1.5px #C4914F', WebkitTextFillColor: 'transparent', fontWeight: 400 }}>♦</span>
+            <span className="text-4xl text-[#C4914F]" style={{ WebkitTextStroke: '1.5px #C4914F', WebkitTextFillColor: 'transparent', fontWeight: 400 }}>♣</span>
           </div>
-          <h1 className="text-5xl font-bold mb-4">Bridge Partner Finder</h1>
+          <h1 className="text-5xl font-bold mb-4 font-serif">Bridge Partner Finder</h1>
           <p className="text-lg max-w-3xl mx-auto opacity-90">
             Looking for a bridge partner? Browse available players or post your availability to find your perfect match for your next game.
           </p>
@@ -170,14 +170,14 @@ const PartnerFinder = () => {
       </div>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-8 flex-1">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Available Players - 2/3 width */}
           <div className="lg:col-span-2">
             <div className="flex items-center gap-2 mb-6">
               <Users className="w-5 h-5 text-[#C4914F]" />
-              <h2 className="text-2xl font-bold">Available Players</h2>
-              <span className="text-muted-foreground text-sm">({players.length} {players.length === 1 ? 'player' : 'players'})</span>
+              <h2 className="text-2xl font-serif font-bold">Available Players</h2>
+              <span className="text-gray-500 text-sm">({players.length} {players.length === 1 ? 'player' : 'players'})</span>
             </div>
 
             {players.length === 0 ? (
@@ -187,40 +187,40 @@ const PartnerFinder = () => {
             ) : (
               <div className="grid gap-4">
                 {players.map((player) => (
-                  <Card key={player.id} className="p-6 relative bg-white border border-gray-200 rounded-lg shadow-sm">
+                  <Card key={player.id} className="p-5 relative bg-white border border-gray-200 rounded-xl shadow-sm">
                     {/* Level Badge - Top Right */}
-                    <div className={`absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-medium ${getLevelColor(player.level)}`}>
+                    <div className={`absolute top-3 right-3 px-3 py-0.5 rounded-full text-xs font-medium ${getLevelColor(player.level)}`}>
                       {player.level}
                     </div>
 
-                    <div className="space-y-2 pr-24">
+                    <div className="space-y-2 pr-20">
                       {/* Name */}
                       <div className="flex items-center gap-2">
-                        <Users className="w-4 h-4 text-gray-400" />
-                        <h3 className="text-xl font-semibold text-gray-900">{player.name}</h3>
+                        <Users className="w-[18px] h-[18px] text-gray-400" />
+                        <h3 className="text-lg font-serif font-semibold text-gray-900">{player.name}</h3>
                       </div>
 
                       {/* Date */}
                       <div className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4 text-gray-400" />
+                        <Calendar className="w-[18px] h-[18px] text-gray-400" />
                         <span className="text-sm text-gray-600">{new Date(player.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
                       </div>
 
                       {/* Time */}
                       <div className="flex items-center gap-2">
-                        <Clock className="w-4 h-4 text-gray-400" />
+                        <Clock className="w-[18px] h-[18px] text-gray-400" />
                         <span className="text-sm text-gray-600">{player.time}</span>
                       </div>
 
                       {/* Location */}
                       <div className="flex items-center gap-2">
-                        <MapPin className="w-4 h-4 text-gray-400" />
+                        <MapPin className="w-[18px] h-[18px] text-gray-400" />
                         <span className="text-sm text-gray-600">{player.location}</span>
                       </div>
 
                       {/* Email */}
                       <div className="flex items-center gap-2">
-                        <Mail className="w-4 h-4 text-gray-400" />
+                        <Mail className="w-[18px] h-[18px] text-gray-400" />
                         <a href={`mailto:${player.email}`} className="text-sm text-[#C4914F] hover:underline">
                           {player.email}
                         </a>
@@ -229,7 +229,7 @@ const PartnerFinder = () => {
                       {/* Notes */}
                       {player.notes && (
                         <div className="flex items-start gap-2">
-                          <MessageSquare className="w-4 h-4 text-gray-400 mt-0.5" />
+                          <MessageSquare className="w-[18px] h-[18px] text-gray-400 mt-0.5" />
                           <span className="text-sm text-gray-500 italic">{player.notes}</span>
                         </div>
                       )}
@@ -237,9 +237,9 @@ const PartnerFinder = () => {
                       {/* Remove Button */}
                       <button
                         onClick={() => handleRemove(player)}
-                        className="flex items-center gap-2 text-gray-500 hover:text-gray-700 mt-4 pt-3 border-t border-gray-100 w-full"
+                        className="flex items-center gap-2 text-gray-400 hover:text-gray-600 mt-3 pt-2.5 border-t border-gray-100 w-full transition-colors"
                       >
-                        <UserMinus className="w-4 h-4" />
+                        <UserMinus className="w-[18px] h-[18px]" />
                         <span className="text-sm">Partner no longer needed</span>
                       </button>
                     </div>
@@ -254,7 +254,7 @@ const PartnerFinder = () => {
             <Card className="p-6 sticky top-8">
               <div className="flex items-center gap-2 mb-6">
                 <Users className="w-5 h-5 text-[#C4914F]" />
-                <h2 className="text-lg font-bold">Post Your Availability</h2>
+                <h2 className="text-xl font-serif font-bold">Post Your Availability</h2>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-4">
@@ -371,6 +371,17 @@ const PartnerFinder = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Footer */}
+      <footer className="bg-[#F5F3F0] border-t border-gray-200 py-12 px-4 mt-auto">
+        <div className="container mx-auto text-center">
+          <div className="flex justify-center mb-3">
+            <span className="text-3xl text-gray-400">♠</span>
+          </div>
+          <h3 className="text-lg font-serif font-semibold text-gray-700 mb-2">Bridge Partner Finder</h3>
+          <p className="text-sm text-gray-500">Find your perfect bridge partner for your next game</p>
+        </div>
+      </footer>
     </div>
   );
 };
