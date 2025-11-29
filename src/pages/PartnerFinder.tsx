@@ -33,7 +33,6 @@ interface Player {
   time: string;
   level: "Novice" | "Beginner" | "Intermediate" | "Advanced" | "Expert";
   notes?: string;
-  eventLink?: string;
 }
 
 const PartnerFinder = () => {
@@ -52,7 +51,6 @@ const PartnerFinder = () => {
     time: "",
     level: "Beginner" as Player["level"],
     notes: "",
-    eventLink: "",
   });
 
   // Load players from localStorage on mount
@@ -111,7 +109,6 @@ const PartnerFinder = () => {
       time: "",
       level: "Beginner",
       notes: "",
-      eventLink: "",
     });
 
     toast({
@@ -149,13 +146,21 @@ const PartnerFinder = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <div className="bg-primary text-primary-foreground py-16 px-4">
-        <div className="container mx-auto text-center">
+      <div className="bg-[#2D5F4D] text-white py-20 px-4 relative overflow-hidden">
+        {/* Large decorative card symbols in background */}
+        <div className="absolute inset-0 pointer-events-none opacity-10">
+          <span className="absolute text-[200px] top-0 left-10">♠</span>
+          <span className="absolute text-[180px] top-20 left-[30%]">♥</span>
+          <span className="absolute text-[200px] bottom-10 right-10">♦</span>
+          <span className="absolute text-[180px] top-10 right-[25%]">♣</span>
+        </div>
+        
+        <div className="container mx-auto text-center relative z-10">
           <div className="flex justify-center gap-4 mb-6">
-            <span className="text-4xl text-accent">♠</span>
-            <span className="text-4xl text-accent">♥</span>
-            <span className="text-4xl text-accent">♦</span>
-            <span className="text-4xl text-accent">♣</span>
+            <span className="text-3xl">♠</span>
+            <span className="text-3xl">♥</span>
+            <span className="text-3xl">♦</span>
+            <span className="text-3xl">♣</span>
           </div>
           <h1 className="text-5xl font-bold mb-4">Bridge Partner Finder</h1>
           <p className="text-lg max-w-3xl mx-auto opacity-90">
@@ -170,9 +175,9 @@ const PartnerFinder = () => {
           {/* Available Players - 2/3 width */}
           <div className="lg:col-span-2">
             <div className="flex items-center gap-2 mb-6">
-              <Users className="w-5 h-5 text-accent" />
+              <Users className="w-5 h-5 text-[#C4914F]" />
               <h2 className="text-2xl font-bold">Available Players</h2>
-              <span className="text-muted-foreground">({players.length} {players.length === 1 ? 'player' : 'players'})</span>
+              <span className="text-muted-foreground text-sm">({players.length} {players.length === 1 ? 'player' : 'players'})</span>
             </div>
 
             {players.length === 0 ? (
@@ -180,76 +185,62 @@ const PartnerFinder = () => {
                 <p className="text-muted-foreground">No players currently seeking partners. Be the first to post!</p>
               </Card>
             ) : (
-              <div className="grid gap-6">
+              <div className="grid gap-4">
                 {players.map((player) => (
-                  <Card key={player.id} className="p-8 relative bg-white border border-gray-200 rounded-2xl shadow-sm">
+                  <Card key={player.id} className="p-6 relative bg-white border border-gray-200 rounded-lg shadow-sm">
                     {/* Level Badge - Top Right */}
-                    <div className={`absolute top-6 right-6 px-4 py-1.5 rounded-full text-sm font-medium ${getLevelColor(player.level)}`}>
+                    <div className={`absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-medium ${getLevelColor(player.level)}`}>
                       {player.level}
                     </div>
 
-                    <div className="space-y-4 pr-32">
+                    <div className="space-y-2 pr-24">
                       {/* Name */}
-                      <div className="flex items-center gap-3">
-                        <Users className="w-5 h-5 text-gray-400" />
-                        <h3 className="text-3xl font-playfair font-bold text-gray-900">{player.name}</h3>
+                      <div className="flex items-center gap-2">
+                        <Users className="w-4 h-4 text-gray-400" />
+                        <h3 className="text-xl font-semibold text-gray-900">{player.name}</h3>
                       </div>
 
                       {/* Date */}
-                      <div className="flex items-center gap-3">
-                        <Calendar className="w-5 h-5 text-gray-400" />
-                        <span className="text-lg text-gray-600">{new Date(player.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
+                      <div className="flex items-center gap-2">
+                        <Calendar className="w-4 h-4 text-gray-400" />
+                        <span className="text-sm text-gray-600">{new Date(player.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
                       </div>
 
                       {/* Time */}
-                      <div className="flex items-center gap-3">
-                        <Clock className="w-5 h-5 text-gray-400" />
-                        <span className="text-lg text-gray-600">{player.time}</span>
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-4 h-4 text-gray-400" />
+                        <span className="text-sm text-gray-600">{player.time}</span>
                       </div>
 
                       {/* Location */}
-                      <div className="flex items-center gap-3">
-                        <MapPin className="w-5 h-5 text-gray-400" />
-                        <span className="text-lg text-gray-600">{player.location}</span>
+                      <div className="flex items-center gap-2">
+                        <MapPin className="w-4 h-4 text-gray-400" />
+                        <span className="text-sm text-gray-600">{player.location}</span>
                       </div>
 
                       {/* Email */}
-                      <div className="flex items-center gap-3">
-                        <Mail className="w-5 h-5 text-gray-400" />
-                        <a href={`mailto:${player.email}`} className="text-lg text-[#C4914F] hover:underline">
+                      <div className="flex items-center gap-2">
+                        <Mail className="w-4 h-4 text-gray-400" />
+                        <a href={`mailto:${player.email}`} className="text-sm text-[#C4914F] hover:underline">
                           {player.email}
                         </a>
                       </div>
 
                       {/* Notes */}
                       {player.notes && (
-                        <div className="flex items-start gap-3">
-                          <MessageSquare className="w-5 h-5 text-gray-400 mt-0.5" />
-                          <span className="text-lg text-gray-500 italic">{player.notes}</span>
-                        </div>
-                      )}
-
-                      {/* Event Link */}
-                      {player.eventLink && (
-                        <div className="text-sm">
-                          <a 
-                            href={player.eventLink} 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="text-primary hover:underline"
-                          >
-                            View Event Details →
-                          </a>
+                        <div className="flex items-start gap-2">
+                          <MessageSquare className="w-4 h-4 text-gray-400 mt-0.5" />
+                          <span className="text-sm text-gray-500 italic">{player.notes}</span>
                         </div>
                       )}
 
                       {/* Remove Button */}
                       <button
                         onClick={() => handleRemove(player)}
-                        className="flex items-center gap-2 text-gray-500 hover:text-gray-700 mt-6 pt-4 border-t border-gray-200"
+                        className="flex items-center gap-2 text-gray-500 hover:text-gray-700 mt-4 pt-3 border-t border-gray-100 w-full"
                       >
-                        <UserMinus className="w-5 h-5" />
-                        <span className="text-base">Partner no longer needed</span>
+                        <UserMinus className="w-4 h-4" />
+                        <span className="text-sm">Partner no longer needed</span>
                       </button>
                     </div>
                   </Card>
@@ -262,8 +253,8 @@ const PartnerFinder = () => {
           <div className="lg:col-span-1">
             <Card className="p-6 sticky top-8">
               <div className="flex items-center gap-2 mb-6">
-                <Users className="w-5 h-5 text-accent" />
-                <h2 className="text-xl font-bold">Post Your Availability</h2>
+                <Users className="w-5 h-5 text-[#C4914F]" />
+                <h2 className="text-lg font-bold">Post Your Availability</h2>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-4">
@@ -325,13 +316,13 @@ const PartnerFinder = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor="level">Level *</Label>
+                  <Label htmlFor="level">Playing Level *</Label>
                   <Select
                     value={formData.level}
                     onValueChange={(value) => setFormData({ ...formData, level: value as Player["level"] })}
                   >
                     <SelectTrigger id="level">
-                      <SelectValue />
+                      <SelectValue placeholder="Select your level" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Novice">Novice</SelectItem>
@@ -344,24 +335,13 @@ const PartnerFinder = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor="notes">Notes</Label>
+                  <Label htmlFor="notes">Notes (optional)</Label>
                   <Textarea
                     id="notes"
-                    placeholder="Optional notes about your game or preferences"
+                    placeholder="Any additional details (preferred conventions, online/in-person, etc.)"
                     value={formData.notes}
                     onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                     rows={3}
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="eventLink">Event Link (Optional)</Label>
-                  <Input
-                    id="eventLink"
-                    type="url"
-                    placeholder="https://..."
-                    value={formData.eventLink}
-                    onChange={(e) => setFormData({ ...formData, eventLink: e.target.value })}
                   />
                 </div>
 
@@ -378,20 +358,15 @@ const PartnerFinder = () => {
       <AlertDialog open={removeDialog.open} onOpenChange={(open) => setRemoveDialog({ open, player: null })}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Remove Listing?</AlertDialogTitle>
+            <AlertDialogTitle>Confirm Removal</AlertDialogTitle>
             <AlertDialogDescription>
-              Please confirm that <span className="font-semibold">{removeDialog.player?.email}</span> no longer needs a partner for their bridge game on{" "}
-              {removeDialog.player && (
-                <>
-                  {new Date(removeDialog.player.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })} at {removeDialog.player.time}
-                </>
-              )}.
+              Are you sure you want to remove this listing? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction onClick={confirmRemove} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-              Yes, remove listing
+              Remove
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
