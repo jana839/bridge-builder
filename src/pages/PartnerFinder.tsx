@@ -50,8 +50,9 @@ const PartnerFinder = () => {
     name: "",
     email: "",
     location: "",
+    locationOther: "",
     date: "",
-    time: "",
+    time: "12:30",
     level: "Beginner" as Player["level"],
     notes: "",
   });
@@ -99,18 +100,41 @@ const PartnerFinder = () => {
     }
   };
 
+  const formatTime = (time: string) => {
+    const [hours, minutes] = time.split(':');
+    const hour = parseInt(hours);
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
+    return `${displayHour}:${minutes} ${ampm}`;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.name || !formData.email || !formData.location || !formData.date || !formData.time) {
+    const finalLocation = formData.location === "Other" ? formData.locationOther : formData.location;
+    
+    if (!formData.name || !formData.email || !finalLocation || !formData.date || !formData.time) {
       toast.error("Please fill in all required fields");
+      return;
+    }
+
+    if (formData.location === "Other" && !formData.locationOther.trim()) {
+      toast.error("Please specify your location");
       return;
     }
 
     try {
       const { error } = await supabase
         .from('partner_listings')
-        .insert([formData]);
+        .insert([{
+          name: formData.name,
+          email: formData.email,
+          location: finalLocation,
+          date: formData.date,
+          time: formData.time,
+          level: formData.level,
+          notes: formData.notes,
+        }]);
 
       if (error) throw error;
 
@@ -119,8 +143,9 @@ const PartnerFinder = () => {
         name: "",
         email: "",
         location: "",
+        locationOther: "",
         date: "",
-        time: "",
+        time: "12:30",
         level: "Beginner",
         notes: "",
       });
@@ -242,7 +267,7 @@ const PartnerFinder = () => {
                           {/* Time */}
                           <div className="flex items-center gap-2 text-muted-foreground">
                             <Clock className="w-4 h-4 flex-shrink-0" />
-                            <span>{player.time}</span>
+                            <span>{formatTime(player.time)}</span>
                           </div>
 
                           {/* Location */}
@@ -323,13 +348,30 @@ const PartnerFinder = () => {
 
                 <div>
                   <Label htmlFor="location">Location *</Label>
-                  <Input
-                    id="location"
-                    placeholder="City or venue name"
+                  <Select
                     value={formData.location}
-                    onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                    required
-                  />
+                    onValueChange={(value) => setFormData({ ...formData, location: value, locationOther: "" })}
+                  >
+                    <SelectTrigger id="location">
+                      <SelectValue placeholder="Select location" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Branford">Branford</SelectItem>
+                      <SelectItem value="Old Saybrook">Old Saybrook</SelectItem>
+                      <SelectItem value="Online">Online</SelectItem>
+                      <SelectItem value="Other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  
+                  {formData.location === "Other" && (
+                    <Input
+                      placeholder="Please specify location"
+                      value={formData.locationOther}
+                      onChange={(e) => setFormData({ ...formData, locationOther: e.target.value })}
+                      className="mt-2"
+                      required
+                    />
+                  )}
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
@@ -345,13 +387,39 @@ const PartnerFinder = () => {
                   </div>
                   <div>
                     <Label htmlFor="time">Time *</Label>
-                    <Input
-                      id="time"
-                      type="time"
+                    <Select
                       value={formData.time}
-                      onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-                      required
-                    />
+                      onValueChange={(value) => setFormData({ ...formData, time: value })}
+                    >
+                      <SelectTrigger id="time">
+                        <SelectValue placeholder="Select time" />
+                      </SelectTrigger>
+                      <SelectContent className="max-h-[200px]">
+                        <SelectItem value="09:00">9:00 AM</SelectItem>
+                        <SelectItem value="09:30">9:30 AM</SelectItem>
+                        <SelectItem value="10:00">10:00 AM</SelectItem>
+                        <SelectItem value="10:30">10:30 AM</SelectItem>
+                        <SelectItem value="11:00">11:00 AM</SelectItem>
+                        <SelectItem value="11:30">11:30 AM</SelectItem>
+                        <SelectItem value="12:00">12:00 PM</SelectItem>
+                        <SelectItem value="12:30">12:30 PM</SelectItem>
+                        <SelectItem value="13:00">1:00 PM</SelectItem>
+                        <SelectItem value="13:30">1:30 PM</SelectItem>
+                        <SelectItem value="14:00">2:00 PM</SelectItem>
+                        <SelectItem value="14:30">2:30 PM</SelectItem>
+                        <SelectItem value="15:00">3:00 PM</SelectItem>
+                        <SelectItem value="15:30">3:30 PM</SelectItem>
+                        <SelectItem value="16:00">4:00 PM</SelectItem>
+                        <SelectItem value="16:30">4:30 PM</SelectItem>
+                        <SelectItem value="17:00">5:00 PM</SelectItem>
+                        <SelectItem value="17:30">5:30 PM</SelectItem>
+                        <SelectItem value="18:00">6:00 PM</SelectItem>
+                        <SelectItem value="18:30">6:30 PM</SelectItem>
+                        <SelectItem value="19:00">7:00 PM</SelectItem>
+                        <SelectItem value="19:30">7:30 PM</SelectItem>
+                        <SelectItem value="20:00">8:00 PM</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
 
