@@ -97,7 +97,8 @@ const PartnerFinder = () => {
       const { data, error } = await supabase
         .from('partner_listings')
         .select('*')
-        .order('created_at', { ascending: false });
+        .order('date', { ascending: true })
+        .order('time', { ascending: true });
 
       if (error) throw error;
 
