@@ -157,11 +157,11 @@ const PartnerFinder = () => {
 
   const getLevelColor = (level: Player["level"]) => {
     const colors = {
-      Novice: "bg-[#6B9F8E] text-white",
-      Beginner: "bg-[#6B9F8E] text-white",
-      Intermediate: "bg-[#C4914F] text-white",
-      Advanced: "bg-[#2D5F4D] text-white",
-      Expert: "bg-white text-[#C4914F] border-2 border-[#C4914F]",
+      Novice: "bg-badge-novice text-white",
+      Beginner: "bg-badge-beginner text-white",
+      Intermediate: "bg-badge-intermediate text-white",
+      Advanced: "bg-badge-advanced text-white",
+      Expert: "bg-badge-expert text-white",
     };
     return colors[level];
   };
@@ -213,65 +213,76 @@ const PartnerFinder = () => {
               </Card>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {players.map((player) => (
-                  <Card key={player.id} className="p-6 relative bg-[#FAFAF8] border border-gray-200 rounded-3xl shadow-sm overflow-hidden">
-                    {/* Level Badge - Top Right */}
-                    <div className={`absolute top-4 right-4 px-4 py-1.5 rounded-xl text-sm font-semibold ${getLevelColor(player.level)}`}>
-                      {player.level}
-                    </div>
-
-                    <div className="space-y-4 pr-32">
-                      {/* Name */}
-                      <div className="flex items-center gap-3">
-                        <Users className="w-6 h-6 text-gray-400 flex-shrink-0" />
-                        <h3 className="text-2xl font-serif font-bold text-gray-900">{player.name}</h3>
+                {players.map((player, index) => (
+                  <Card key={player.id} className="bg-gradient-card border-border/50 shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1 overflow-hidden">
+                    <div className="p-5 relative">
+                      {/* Level Badge - Top Right Corner */}
+                      <div className={`absolute -top-0 -right-0 flex-shrink-0 rounded-none rounded-bl-lg rounded-tr-lg px-3 py-1.5 text-xs font-semibold ${getLevelColor(player.level)}`}>
+                        {player.level}
                       </div>
 
-                      {/* Date */}
-                      <div className="flex items-center gap-3">
-                        <Calendar className="w-5 h-5 text-gray-500 flex-shrink-0" />
-                        <span className="text-base text-gray-600">
-                          {new Date(player.date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
-                        </span>
-                      </div>
-
-                      {/* Time */}
-                      <div className="flex items-center gap-3">
-                        <Clock className="w-5 h-5 text-gray-500 flex-shrink-0" />
-                        <span className="text-base text-gray-600">{player.time}</span>
-                      </div>
-
-                      {/* Location */}
-                      <div className="flex items-center gap-3">
-                        <MapPin className="w-5 h-5 text-gray-500 flex-shrink-0" />
-                        <span className="text-base text-gray-600">{player.location}</span>
-                      </div>
-
-                      {/* Email */}
-                      <div className="flex items-center gap-3">
-                        <Mail className="w-5 h-5 text-gray-500 flex-shrink-0" />
-                        <a href={`mailto:${player.email}`} className="text-base text-[#D4934F] hover:underline break-all">
-                          {player.email}
-                        </a>
-                      </div>
-
-                      {/* Notes */}
-                      {player.notes && (
-                        <div className="flex items-start gap-3 pt-2">
-                          <MessageSquare className="w-5 h-5 text-gray-500 flex-shrink-0 mt-0.5" />
-                          <span className="text-base text-gray-500 italic">{player.notes}</span>
+                      <div>
+                        {/* Name */}
+                        <div className="flex items-center gap-2 mb-3 pr-20">
+                          <Users className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                          <h3 className="font-serif text-lg font-semibold text-foreground truncate">
+                            {player.name}
+                          </h3>
                         </div>
-                      )}
-                    </div>
+                        
+                        <div className="space-y-2 text-sm">
+                          {/* Date */}
+                          <div className="flex items-center gap-2 text-muted-foreground">
+                            <Calendar className="w-4 h-4 flex-shrink-0" />
+                            <span>
+                              {new Date(player.date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+                            </span>
+                          </div>
+                          
+                          {/* Time */}
+                          <div className="flex items-center gap-2 text-muted-foreground">
+                            <Clock className="w-4 h-4 flex-shrink-0" />
+                            <span>{player.time}</span>
+                          </div>
 
-                    {/* Remove Button */}
-                    <button
-                      onClick={() => handleRemove(player)}
-                      className="flex items-center justify-center gap-2 text-gray-500 hover:text-red-500 hover:bg-red-50 mt-8 pt-5 pb-5 border-t border-gray-200 w-full transition-colors -mx-6 px-6"
-                    >
-                      <UserMinus className="w-5 h-5" />
-                      <span className="text-base">Partner no longer needed</span>
-                    </button>
+                          {/* Location */}
+                          <div className="flex items-center gap-2 text-muted-foreground">
+                            <MapPin className="w-4 h-4 flex-shrink-0" />
+                            <span className="truncate">{player.location}</span>
+                          </div>
+
+                          {/* Email */}
+                          <div className="flex items-center gap-2 text-muted-foreground">
+                            <Mail className="w-4 h-4 flex-shrink-0" />
+                            <a 
+                              href={`mailto:${player.email}`}
+                              className="text-accent hover:underline truncate"
+                            >
+                              {player.email}
+                            </a>
+                          </div>
+
+                          {/* Notes */}
+                          {player.notes && (
+                            <div className="flex items-start gap-2 text-muted-foreground pt-1">
+                              <MessageSquare className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                              <span className="text-xs italic line-clamp-2">{player.notes}</span>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Remove Button */}
+                        <div className="mt-4 pt-3 border-t border-border/50">
+                          <button
+                            onClick={() => handleRemove(player)}
+                            className="w-full text-sm text-muted-foreground hover:text-destructive hover:bg-destructive/10 py-2 px-3 rounded-md transition-colors flex items-center justify-center gap-2"
+                          >
+                            <UserMinus className="w-4 h-4" />
+                            Partner no longer needed
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                   </Card>
                 ))}
               </div>
