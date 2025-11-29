@@ -214,64 +214,64 @@ const PartnerFinder = () => {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {players.map((player) => (
-                  <Card key={player.id} className="p-5 relative bg-white border border-gray-200 rounded-xl shadow-sm">
+                  <Card key={player.id} className="p-6 relative bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
                     {/* Level Badge - Top Right */}
-                    <div className={`absolute top-3 right-3 px-3 py-0.5 rounded-full text-xs font-medium ${getLevelColor(player.level)}`}>
+                    <div className={`absolute top-4 right-4 px-4 py-1.5 rounded-lg text-xs font-semibold ${getLevelColor(player.level)}`}>
                       {player.level}
                     </div>
 
-                    <div className="space-y-2 pr-20">
+                    <div className="space-y-3 pr-32">
                       {/* Name */}
-                      <div className="flex items-center gap-2">
-                        <Users className="w-[18px] h-[18px] text-gray-400" />
-                        <h3 className="text-lg font-serif font-semibold text-gray-900">{player.name}</h3>
+                      <div className="flex items-center gap-3">
+                        <Users className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                        <h3 className="text-xl font-serif font-bold text-gray-900">{player.name}</h3>
                       </div>
 
                       {/* Date */}
-                      <div className="flex items-center gap-2">
-                        <Calendar className="w-[18px] h-[18px] text-gray-400" />
-                        <span className="text-sm text-gray-600">
+                      <div className="flex items-center gap-3">
+                        <Calendar className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                        <span className="text-base text-gray-600">
                           {new Date(player.date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
                         </span>
                       </div>
 
                       {/* Time */}
-                      <div className="flex items-center gap-2">
-                        <Clock className="w-[18px] h-[18px] text-gray-400" />
-                        <span className="text-sm text-gray-600">{player.time}</span>
+                      <div className="flex items-center gap-3">
+                        <Clock className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                        <span className="text-base text-gray-600">{player.time}</span>
                       </div>
 
                       {/* Location */}
-                      <div className="flex items-center gap-2">
-                        <MapPin className="w-[18px] h-[18px] text-gray-400" />
-                        <span className="text-sm text-gray-600">{player.location}</span>
+                      <div className="flex items-center gap-3">
+                        <MapPin className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                        <span className="text-base text-gray-600">{player.location}</span>
                       </div>
 
                       {/* Email */}
-                      <div className="flex items-center gap-2">
-                        <Mail className="w-[18px] h-[18px] text-gray-400" />
-                        <a href={`mailto:${player.email}`} className="text-sm text-[#C4914F] hover:underline">
+                      <div className="flex items-center gap-3">
+                        <Mail className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                        <a href={`mailto:${player.email}`} className="text-base text-[#C4914F] hover:underline break-all">
                           {player.email}
                         </a>
                       </div>
 
                       {/* Notes */}
                       {player.notes && (
-                        <div className="flex items-start gap-2">
-                          <MessageSquare className="w-[18px] h-[18px] text-gray-400 mt-0.5" />
-                          <span className="text-sm text-gray-500 italic">{player.notes}</span>
+                        <div className="flex items-start gap-3">
+                          <MessageSquare className="w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5" />
+                          <span className="text-base text-gray-500 italic">{player.notes}</span>
                         </div>
                       )}
-
-                      {/* Remove Button */}
-                      <button
-                        onClick={() => handleRemove(player)}
-                        className="flex items-center justify-center gap-2 text-gray-400 hover:text-red-500 hover:bg-red-50 mt-3 pt-2.5 pb-2.5 border-t border-gray-100 w-full transition-colors rounded-b-lg"
-                      >
-                        <UserMinus className="w-[18px] h-[18px]" />
-                        <span className="text-sm">Partner no longer needed</span>
-                      </button>
                     </div>
+
+                    {/* Remove Button */}
+                    <button
+                      onClick={() => handleRemove(player)}
+                      className="flex items-center justify-center gap-2 text-gray-400 hover:text-red-500 hover:bg-red-50 mt-6 pt-4 pb-4 border-t border-gray-200 w-full transition-colors -mx-6 px-6"
+                    >
+                      <UserMinus className="w-5 h-5" />
+                      <span className="text-base">Partner no longer needed</span>
+                    </button>
                   </Card>
                 ))}
               </div>
