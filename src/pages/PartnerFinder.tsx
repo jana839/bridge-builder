@@ -45,7 +45,7 @@ interface Player {
   created_at?: string;
 }
 
-const LOCATION_OPTIONS = ["Branford", "Old Saybrook", "Online", "Other"];
+const LOCATION_OPTIONS = ["Branford", "Westbrook", "Online", "Tournament", "Other"];
 // "Other" is never stored verbatim (it's replaced by the free-text entry), so it isn't filterable.
 const FILTERABLE_LOCATIONS = LOCATION_OPTIONS.filter((l) => l !== "Other");
 
