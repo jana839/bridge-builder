@@ -263,8 +263,10 @@ const PartnerFinder = () => {
     return true;
   });
 
-  // Get unique locations from players
-  const uniqueLocations = Array.from(new Set(players.map(p => p.location))).sort();
+  // Known locations always appear; plus any extra location a listing actually uses.
+  const uniqueLocations = Array.from(
+    new Set([...FILTERABLE_LOCATIONS, ...players.map((p) => p.location)])
+  ).sort();
 
   const clearFilters = () => {
     setFilters({
