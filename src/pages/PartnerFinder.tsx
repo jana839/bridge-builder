@@ -263,10 +263,16 @@ const PartnerFinder = () => {
     return true;
   });
 
-  // Known locations always appear; plus any extra location a listing actually uses.
-  const uniqueLocations = Array.from(
-    new Set([...FILTERABLE_LOCATIONS, ...players.map((p) => p.location)])
-  ).sort();
+  // Known locations appear in the form's order; any extra location a listing
+  // actually uses is appended after them, alphabetically.
+  const uniqueLocations = (() => {
+    const extras = Array.from(
+      new Set(
+        players.map((p) => p.location).filter((l) => !FILTERABLE_LOCATIONS.includes(l))
+      )
+    ).sort();
+    return [...FILTERABLE_LOCATIONS, ...extras];
+  })();
 
   const clearFilters = () => {
     setFilters({
