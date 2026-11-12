@@ -45,6 +45,10 @@ interface Player {
   created_at?: string;
 }
 
+const LOCATION_OPTIONS = ["Branford", "Old Saybrook", "Online", "Other"];
+// "Other" is never stored verbatim (it's replaced by the free-text entry), so it isn't filterable.
+const FILTERABLE_LOCATIONS = LOCATION_OPTIONS.filter((l) => l !== "Other");
+
 const PartnerFinder = () => {
   const [players, setPlayers] = useState<Player[]>([]);
   const [loading, setLoading] = useState(true);
@@ -259,8 +263,10 @@ const PartnerFinder = () => {
     return true;
   });
 
-  // Get unique locations from players
-  const uniqueLocations = Array.from(new Set(players.map(p => p.location))).sort();
+  // Known locations always appear; plus any extra location a listing actually uses.
+  const uniqueLocations = Array.from(
+    new Set([...FILTERABLE_LOCATIONS, ...players.map((p) => p.location)])
+  ).sort();
 
   const clearFilters = () => {
     setFilters({
@@ -564,10 +570,9 @@ const PartnerFinder = () => {
                       <SelectValue placeholder="Select location" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Branford">Branford</SelectItem>
-                      <SelectItem value="Old Saybrook">Old Saybrook</SelectItem>
-                      <SelectItem value="Online">Online</SelectItem>
-                      <SelectItem value="Other">Other</SelectItem>
+                      {LOCATION_OPTIONS.map((loc) => (
+                        <SelectItem key={loc} value={loc}>{loc}</SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                   
