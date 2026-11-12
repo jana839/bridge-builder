@@ -570,10 +570,9 @@ const PartnerFinder = () => {
                       <SelectValue placeholder="Select location" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Branford">Branford</SelectItem>
-                      <SelectItem value="Old Saybrook">Old Saybrook</SelectItem>
-                      <SelectItem value="Online">Online</SelectItem>
-                      <SelectItem value="Other">Other</SelectItem>
+                      {LOCATION_OPTIONS.map((loc) => (
+                        <SelectItem key={loc} value={loc}>{loc}</SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                   
